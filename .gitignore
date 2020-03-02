@@ -5,7 +5,7 @@ artifacts/
 .classpath
 .DS_Store
 *.iml
-resources/
+
 .project
 *.out
 *.log
