@@ -1,9 +1,19 @@
 package com.build.qa.build.selenium.tests;
 
+import com.build.qa.build.selenium.pageobjects.checkout.CheckoutPage;
+import com.build.qa.build.selenium.pageobjects.navigation.Navigation;
+import com.build.qa.build.selenium.pageobjects.navigationbar.NavigationBar;
+import com.build.qa.build.selenium.pageobjects.popups.Popups;
+import com.build.qa.build.selenium.pageobjects.productpage.ProductPage;
+import com.build.qa.build.selenium.pageobjects.resultsidebar.ResultsSideBar;
+import com.build.qa.build.selenium.pageobjects.searchpage.SearchPage;
+import com.build.qa.build.selenium.pageobjects.sinkspage.SinksPage;
 import org.junit.Test;
 
 import com.build.qa.build.selenium.framework.BaseFramework;
 import com.build.qa.build.selenium.pageobjects.homepage.HomePage;
+import org.openqa.selenium.WebDriver;
+import tools.Tools;
 
 public class BuildTest extends BaseFramework {
 
@@ -11,7 +21,7 @@ public class BuildTest extends BaseFramework {
 	 * Extremely basic test that outlines some basic
 	 * functionality and page objects as well as assertJ
 	 */
-	@Test
+	//@Test
 	public void navigateToHomePage() {
 		driver.get(getConfiguration("HOMEPAGE"));
 		HomePage homePage = new HomePage(driver, wait);
@@ -28,7 +38,27 @@ public class BuildTest extends BaseFramework {
 	 */
 	@Test
 	public void searchForProductLandsOnCorrectProduct() {
-		// TODO: Implement this test
+		Navigation.navigateToHomePage(driver);
+		Popups.closePopups(driver);
+
+		String productName = "Quoizel MY1613";
+		Tools.log("Searching for product");
+ 		NavigationBar.searchNavigationBar(driver, productName);
+
+		SearchPage.selectFirstSearchResult(driver);
+
+		Tools.log("Fetching product text");
+		String actualProductText = ProductPage.fetchProductText(driver);
+		String expectedProductHeadingText = "Quoizel";
+		String expectedProductDescriptionText = "Monterey Mosaic 3 Light 16\" Wide Flush Mount Ceiling Fixture with Pen Shell Mosaic Shade";
+		String expectedCompoundText = expectedProductHeadingText + " " + expectedProductDescriptionText;
+
+		Tools.log(actualProductText);
+		Tools.log(expectedCompoundText);
+		softly.assertThat(actualProductText.equals(expectedCompoundText))
+				.isTrue();
+		Tools.log("Test Finished");
+
 	}
 
 	/**
@@ -39,7 +69,26 @@ public class BuildTest extends BaseFramework {
 	 */
 	@Test
 	public void addProductToCartFromCategoryDrop() {
-		// TODO: Implement this test
+		String pageURL = "https://www.build.com/bathroom-sinks/c108504";
+		Navigation.navigateToPage(driver, pageURL);
+
+		Popups.closePopups(driver);
+
+		Tools.log("selecting product");
+		SinksPage.selectSecondProduct(driver);
+
+		String productPageText = ProductPage.fetchProductText(driver);
+		Tools.log(productPageText);
+
+		ProductPage.addProductToCart(driver);
+
+		String checkoutPageText =  CheckoutPage.fetchProductText(driver);
+		Tools.log(productPageText);
+
+		softly.assertThat(productPageText.equals(checkoutPageText))
+				.isTrue();
+		Tools.log("Test Finished");
+
 	}
 
 	/**
@@ -50,7 +99,27 @@ public class BuildTest extends BaseFramework {
 	 */
 	@Test
 	public void addProductToCartAndEmailIt() {
-		// TODO: Implement this test
+		String pageURL = "https://www.build.com/bathroom-sinks/c108504";
+		Navigation.navigateToPage(driver, pageURL);
+
+		Popups.closePopups(driver);
+
+		Tools.log("selecting product");
+		SinksPage.selectSecondProduct(driver);
+
+		Tools.log("adding to cart");
+		ProductPage.addProductToCart(driver);
+
+		Tools.log("opening email");
+		CheckoutPage.selectEmail(driver);
+
+		boolean emailHasSent = CheckoutPage.fillEmailForm(driver);
+
+		softly.assertThat(emailHasSent)
+				.isTrue();
+
+		Tools.log("Test Finished");
+
 	}
 
 	/**
@@ -62,6 +131,17 @@ public class BuildTest extends BaseFramework {
 	 */
 	@Test
 	public void facetNarrowBysResultInCorrectProductCounts() {
-		// TODO: Implement this test
+		String pageURL = "https://www.build.com/single-hole-sink-faucet/c109954";
+		Navigation.navigateToPage(driver, pageURL);
+
+		Popups.closePopups(driver);
+
+		boolean resultsEqual = ResultsSideBar.defineSingleHoleFaucet(driver);
+
+		softly.assertThat(resultsEqual)
+				.isTrue();
+
+		Tools.log("Test Finished");
+
 	}
 }

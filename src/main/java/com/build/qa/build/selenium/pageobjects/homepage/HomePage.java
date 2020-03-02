@@ -19,4 +19,7 @@ public class HomePage extends BasePage {
 	public boolean onBuildTheme() { 
 		return wait.until(ExpectedConditions.presenceOfElementLocated(buildThemeBody)) != null;
 	}
+
+
+
 }

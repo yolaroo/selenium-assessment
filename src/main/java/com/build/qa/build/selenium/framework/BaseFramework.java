@@ -6,21 +6,17 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.JUnitSoftAssertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import seleniumcore.SeleniumDriver;
 
 public abstract class BaseFramework {
 	protected WebDriver driver;
@@ -50,16 +46,10 @@ public abstract class BaseFramework {
 		DesiredCapabilities capabilities;
 		// Which driver to use?
 		if (DRIVER_CHROME.equalsIgnoreCase(configuration.getProperty("BROWSER"))) {
-			capabilities = DesiredCapabilities.chrome();
-			WebDriverManager.chromedriver().setup();
-			driver = new ChromeDriver(capabilities);
+			driver = SeleniumDriver.fetchChromeWebDriver();
 		} else if (DRIVER_FIREFOX.equalsIgnoreCase(configuration.getProperty("BROWSER"))) {
-			capabilities = DesiredCapabilities.firefox();
-			driver = new FirefoxDriver(capabilities);
+			driver =SeleniumDriver.fetchFirefoxDriver();
 		}
-		// Define fluent wait
-		wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS).pollingEvery(500, TimeUnit.MILLISECONDS)
-				.ignoring(NoSuchElementException.class);
 	}
 
 	protected WebDriver getDriver() {
@@ -73,7 +63,7 @@ public abstract class BaseFramework {
 	@After
 	public void tearDownAfter() {
 		LOG.info("Quitting driver.");
-		driver.quit();
+		SeleniumDriver.closeWebDriver(driver);
 		driver = null;
 	}
 }
