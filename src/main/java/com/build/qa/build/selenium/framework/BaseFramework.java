@@ -48,7 +48,7 @@ public abstract class BaseFramework {
 		if (DRIVER_CHROME.equalsIgnoreCase(configuration.getProperty("BROWSER"))) {
 			driver = SeleniumDriver.fetchChromeWebDriver();
 		} else if (DRIVER_FIREFOX.equalsIgnoreCase(configuration.getProperty("BROWSER"))) {
-			driver =SeleniumDriver.fetchFirefoxDriver();
+			driver = SeleniumDriver.fetchFirefoxDriver();
 		}
 	}
 

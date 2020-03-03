@@ -45,7 +45,7 @@ public class CheckoutPage {
         String yourName = "yourname " + uuid;
         String yourEmail = "youremail"+uuid+"@gmail.com";
         String recipientName = "othername " + uuid;
-        String recipientEmail = "test.automation+SeleniumTest@build.com";
+        String recipientEmail = "test.automation+SeleniumTest"+uuid+"@build.com";
         //String recipientEmail = "test"+uuid+"@gmail.com";
         String messageText = "This is "+yourName+", sending you a cart from my automation!";
 

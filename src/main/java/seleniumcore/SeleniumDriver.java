@@ -29,6 +29,8 @@ public class SeleniumDriver {
 
         ChromeOptions chrome_options = new ChromeOptions();
         chrome_options.setExperimentalOption("prefs", prefs);
+        chrome_options.addArguments("--window-size=1920,1080");
+
         WebDriver driver = new ChromeDriver(chrome_options);
 
 
@@ -44,6 +46,8 @@ public class SeleniumDriver {
         FirefoxProfile profile = new FirefoxProfile();
         profile.setPreference("dom.webnotifications.enabled", false);
         FirefoxOptions options = new FirefoxOptions();
+        options.addArguments("--width=1920");
+        options.addArguments("--height=1080");
         options.setProfile(profile);
 
         WebDriver driver = new FirefoxDriver(options);
